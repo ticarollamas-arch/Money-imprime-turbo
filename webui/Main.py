@@ -134,7 +134,7 @@ LOOMLOOM_MAX_POLL_FAILURES = 5
 # 火山引擎、无限星河排列；其余服务随后展示。这样两个入口的顺序一致，同时
 # 不改变 config.toml、历史任务和 API 请求中的字段语义，旧用户无需迁移配置。
 VIDEO_SOURCE_GROUPS = {
-    "stock_video": ("pexels", "pixabay", "coverr"),
+    "stock_video": ("coverr",),
     "ai_video": (
         "metaso_minimax",
         "ofox",
@@ -1569,7 +1569,7 @@ def _apply_restored_params(params):
     )
 
     # 视频设置。素材上传控件不能由服务端写入，因此本地素材需要用户重新选择。
-    video_source = params.get("video_source") or "pexels"
+    video_source = params.get("video_source") or "coverr"
     _set_stable_widget_value("video_source_select", video_source)
     _set_stable_widget_value(
         "video_concat_mode_select", params.get("video_concat_mode") or "random"
@@ -3376,7 +3376,7 @@ def _initialize_material_navigation(target, settings):
         for group, providers in VIDEO_SOURCE_GROUPS.items()
         if group != "local"
     }
-    source = settings.get("video_source", "pexels")
+    source = settings.get("video_source", "coverr")
     source_group = next(
         (group for group, providers in groups.items() if source in providers), None
     )
@@ -3500,7 +3500,7 @@ def _render_general_settings(settings):
         active = (
             settings.get("llm_provider", DEFAULT_LLM_PROVIDER_ID)
             if section == "llm"
-            else settings.get("video_source", "pexels")
+            else settings.get("video_source", "coverr")
         )
         is_active_category = section == "llm" or active in VIDEO_SOURCE_GROUPS[section]
         options = configured[section]
@@ -6051,9 +6051,14 @@ def _render_video_settings(panel, params):
                 "local": tr("Local file"),
             }
             saved_video_source_name = str(
-                config.snapshot_config_with_pending(config.app).get("video_source", "pexels")
-                or "pexels"
+                config.snapshot_config_with_pending(config.app).get("video_source", "coverr")
+                or "coverr"
             )
+            # Migra configurações antigas de Pexels/Pixabay para Coverr: a interface
+            # deste pacote oferece Coverr como única fonte de vídeos de banco.
+            if saved_video_source_name in {"pexels", "pixabay"}:
+                saved_video_source_name = "coverr"
+                _set_runtime_config("app", "video_source", "coverr")
             params.video_source = grouped_selectbox(
                 tr("Video Source"),
                 groups=(
@@ -9056,8 +9061,6 @@ def _render_generation_controls(
         if params.video_source not in [
             "infistar",
             "jalapeno",
-            "pexels",
-            "pixabay",
             "coverr",
             "wavespeed",
             "volcengine_seedance",

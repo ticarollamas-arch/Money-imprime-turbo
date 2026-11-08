@@ -28,8 +28,6 @@ DEFAULT_VOICE_NAME = "zh-CN-XiaoxiaoNeural-Female"
 DEFAULT_UV_LOCK_TIMEOUT = "1200"
 NEEDS_INPUT_EXIT_CODE = 10
 SUPPORTED_SOURCES = {
-    "pexels",
-    "pixabay",
     "coverr",
     "wavespeed",
     "volcengine_seedance",
@@ -381,7 +379,7 @@ def reuse_existing_llm_provider(config_path: Path) -> str:
 
 def selected_video_source(cli_args: list[str]) -> str:
     """Read the effective material source from forwarded CLI arguments."""
-    source = "pexels"
+    source = "coverr"
     for index, item in enumerate(cli_args):
         if item == "--video-source" and index + 1 < len(cli_args):
             source = cli_args[index + 1].strip().lower()

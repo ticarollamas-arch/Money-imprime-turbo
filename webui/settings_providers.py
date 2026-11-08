@@ -91,7 +91,7 @@ def configured_material_providers(settings, groups, codex_connected=False):
     """Return configured providers per material category, preserving its order."""
     enabled = {
         provider: _has_keys(settings.get(f"{provider}_api_keys"))
-        for provider in ("pexels", "pixabay", "coverr", "wavespeed")
+        for provider in ("coverr", "wavespeed")
     }
     enabled.update(
         {

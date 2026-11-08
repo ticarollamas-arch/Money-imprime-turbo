@@ -2361,7 +2361,7 @@ def _select_materials_until_duration(
 def download_videos(
     task_id: str,
     search_terms: List[str],
-    source: str = "pexels",
+    source: str = "coverr",
     video_aspect: VideoAspect = VideoAspect.portrait,
     video_concat_mode: VideoConcatMode = VideoConcatMode.random,
     audio_duration: float = 0.0,

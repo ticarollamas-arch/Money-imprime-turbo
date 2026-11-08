@@ -38,8 +38,6 @@ _BATCH_TASK_MAX_COUNT = 100
 # openai_image 只在单任务入口可用；集中定义后，新增 Provider 不会再次遗漏
 # 批量校验。这里仅包含 CLI 已公开支持的来源，不强行暴露 WebUI 专属流程。
 _CLI_VIDEO_SOURCES = (
-    "pexels",
-    "pixabay",
     "coverr",
     "wavespeed",
     "volcengine_seedance",
@@ -354,7 +352,7 @@ Batch manifests:
     material_group = parser.add_argument_group("materials and pipeline")
     material_group.add_argument(
         "--video-source",
-        default="pexels",
+        default="coverr",
         choices=_CLI_VIDEO_SOURCES,
         help="video material provider; online providers require matching API keys in config.toml",
     )
